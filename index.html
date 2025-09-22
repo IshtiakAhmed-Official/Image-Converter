@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🖼️ Image Converter</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1 id="mainHeading">Image Converter</h1>
+  <div id="pasteBox" tabindex="0" aria-label="Paste image box" role="textbox">
+    <h2>Paste or Drop Here</h2>
+    <div style="display: flex; flex-direction: column; padding-bottom: 10px;">
+      <button id="pasteButton" type="button">Paste Image</button>
+      <button id="selectImageButton" type="button">Select Image</button>
+    </div>
+    <input type="file" id="selectImageInput" accept="image/*" style="display:none" />
+    <form id="controlsForm" aria-label="Image format selection">
+      <fieldset id="outputFormatFieldset" aria-label="Select output image format">
+        <legend>Save as:</legend>
+        <input type="radio" id="png" name="format" value="png" checked />
+        <label for="png">PNG</label>
+        <input type="radio" id="jpeg" name="format" value="jpeg" />
+        <label for="jpeg">JPEG</label>
+        <input type="radio" id="webp" name="format" value="webp" />
+        <label for="webp">WebP</label>
+      </fieldset>
+    </form>
+  </div>
+  <p class="instructions" id="instructionsNote" role="region" aria-live="polite">
+    Steps to paste and save an image:<br><br>
+    1. Copy an image from any source (e.g., screenshot, browser, file explorer).<br>
+    2. Click anywhere on the page.<br>
+    3. Select your preferred image format (PNG, JPEG, WebP) below.<br>
+    4. How to paste:<br>
+    &nbsp;&nbsp;• Press Ctrl+V (Cmd+V on Mac) to paste the image from clipboard.<br>
+    &nbsp;&nbsp;• Alternatively, click the "Paste Image" button to paste using the Clipboard API.<br>
+    &nbsp;&nbsp;• Or, drag & drop inside the "Paste or Drop Here" box.<br>
+    &nbsp;&nbsp;5. Or drag and drop an image file anywhere on this page.<br>
+    6. The pasted, selected, or dropped image will be saved automatically in the selected format.<br>
+    7. If no image is found in the clipboard or drop, an alert notifies you.<br>
+    8. Use the "?" button anytime to toggle these instructions.
+  </p>
+  <button id="helpButton" aria-label="Show help note" title="Help">?</button>
+
+  <script src="script.js"></script>
+</body>
+</html>

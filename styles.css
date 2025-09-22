@@ -1,0 +1,244 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: monospace, monospace;
+  background: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  user-select: none;
+  flex-direction: column;
+}
+h1#mainHeading {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  color: #0288d1;
+  padding-bottom: 5vh;
+}
+#pasteBox {
+  width: 350px;
+  height: 350px;
+  padding: 30px;
+  border: 3px dashed #0288d1;
+  border-radius: 10px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(2,136,209,0.3);
+  cursor: text;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+  justify-content:center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  user-select: text;
+  color: #5f6066;;
+}
+#pasteBox.highlight {
+  background-color: #d0f0ff;
+  border-color: #02669d;
+  box-shadow: 0 0 15px rgba(2,102,157,0.7);
+}
+#pasteBox:focus {
+  outline: none;
+  border-color: #02669d;
+  box-shadow: 0 0 12px rgba(2,102,157,0.6);
+}
+form {
+  margin: 15px 0;
+}
+fieldset#outputFormatFieldset {
+  display: inline-flex;
+  gap: 15px;
+  align-items: center;
+  border: none;
+  margin: 0;
+  padding: 0;
+  font-weight: 600;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+fieldset#outputFormatFieldset legend {
+  margin-right: 8px;
+  font-weight: 600;
+}
+fieldset#outputFormatFieldset input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+fieldset#outputFormatFieldset label {
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  position: relative;
+}
+fieldset#outputFormatFieldset input[type="radio"]:focus + label {
+  outline: 2px solid #0288d1;
+  outline-offset: 2px;
+}
+fieldset#outputFormatFieldset input[type="radio"]:checked + label {
+  background-color: #cceeff;
+  border: 1px solid #0288d1;
+}
+p.instructions {
+  font-style: italic;
+  color: #555;
+  margin-top: 0.5em;
+  padding: 10px 15px;
+  background: #e0f7fa;
+  border-radius: 10px;
+  border: 2px solid #0288d1;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 320px;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+  display: none;
+  font-size: 0.9rem;
+  z-index: 101;
+  text-align: left;
+  line-height: 1.4;
+}
+p.instructions.show {
+  display: block;
+}
+p.instructions::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  right: 25px;
+  border-width: 15px 10px 0 10px;
+  border-style: solid;
+  border-color: #0288d1 transparent transparent transparent;
+  filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.1));
+}
+#helpButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #0288d1;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(2,136,209,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  z-index: 100;
+  line-height: 1;
+  text-align: center;
+}
+#helpButton:focus {
+  outline: 2px solid #02669d;
+}
+#pasteButton, #selectImageButton {
+  margin-top: 10px;
+  padding: 8px 15px;
+  border: none;
+  background-color: #0288d1;
+  color: white;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+#pasteButton:hover, #selectImageButton:hover {
+  background-color: #02669d;
+}
+.dot-circle {
+  margin-left: 20px;
+  margin-bottom: 6px;
+  position: relative;
+}
+.dot-circle::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 8px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #0288d1;
+  border-radius: 50%;
+}
+@media (max-width: 400px) {
+  #pasteBox {
+    width: 300px;
+    height: 300px;
+    padding: 15px;
+    font-size: 0.9rem;
+  }
+  #pasteBox h2 {
+    font-size: 1.3rem;
+  }
+  p.instructions {
+    font-size: 0.85rem;
+    width: 260px;
+  }
+  #helpButton {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+/* Smaller than 360px (very small mobile) */
+@media (max-width: 360px) {
+  #pasteBox {
+    width: 260px;
+    height: 260px;
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+  #pasteBox h2 {
+    font-size: 1.1rem;
+  }
+  p.instructions {
+    width: 220px;
+    font-size: 0.75rem;
+  }
+  #helpButton {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+}
+/* Large screens & 4K monitors */
+@media (min-width: 1920px) {
+  #pasteBox {
+    width: 600px;
+    height: 600px;
+    padding: 40px;
+    font-size: 1.5rem;
+  }
+  #pasteBox h2 {
+    font-size: 2rem;
+  }
+  p.instructions {
+    width: 480px;
+    font-size: 1.2rem;
+  }
+  #helpButton {
+    width: 70px;
+    height: 70px;
+    font-size: 36px;
+  }
+  #pasteButton, #selectImageButton {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+  }
+  fieldset#outputFormatFieldset label {
+    padding: 8px 16px;
+    font-size: 1.1rem;
+  }
+}
