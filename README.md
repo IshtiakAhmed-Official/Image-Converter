@@ -8,7 +8,7 @@ A high-performance, client-side web application designed to convert, resize, and
 - **Batch Processing:** Process multiple images simultaneously. Toggle "Batch Mode" to queue files and export them as a single **ZIP archive**.
 - **Smart Resizing:** Adjust image dimensions with intelligent aspect ratio locking. Options to lock specific width or height values across a batch of images.
 - **Compression Control:** Fine-tune file size with an adjustable quality slider for lossy formats (JPG, WebP, AVIF).
-- **Versatile Input:** Supports Drag & Drop, file selection via system dialog, and direct Clipboard pasting (`Ctrl+V` / `Cmd+V`).
+- **Versatile Input:** Supports Drag & Drop and file selection via system dialog.
 - **Privacy-First:** All image processing is performed entirely in the browser using JavaScript. No images are ever uploaded to a remote server.
 - **Modern UI:** Built with Material Design 3 principles for a clean, responsive experience on both desktop and mobile devices.
 
@@ -17,7 +17,6 @@ A high-performance, client-side web application designed to convert, resize, and
 1. **Import Images**
    - Drag and drop files directly onto the drop zone.
    - Click the **Select Files** button to browse your device.
-   - Paste an image directly from your clipboard.
    - *Note: Enable "Batch Mode" to process multiple files at once.*
 
 2. **Configure Output Settings**
