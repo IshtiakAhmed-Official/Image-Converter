@@ -1,48 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🖼️ Image Converter</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <h1 id="mainHeading">Image Converter</h1>
-  <div id="pasteBox" tabindex="0" aria-label="Paste image box" role="textbox">
-    <h2>Paste or Drop Here</h2>
-    <div style="display: flex; flex-direction: column; padding-bottom: 10px;">
-      <button id="pasteButton" type="button">Paste Image</button>
-      <button id="selectImageButton" type="button">Select Image</button>
-    </div>
-    <input type="file" id="selectImageInput" accept="image/*" style="display:none" />
-    <form id="controlsForm" aria-label="Image format selection">
-      <fieldset id="outputFormatFieldset" aria-label="Select output image format">
-        <legend>Save as:</legend>
-        <input type="radio" id="png" name="format" value="png" checked />
-        <label for="png">PNG</label>
-        <input type="radio" id="jpeg" name="format" value="jpeg" />
-        <label for="jpeg">JPEG</label>
-        <input type="radio" id="webp" name="format" value="webp" />
-        <label for="webp">WebP</label>
-      </fieldset>
-    </form>
-  </div>
-  <p class="instructions" id="instructionsNote" role="region" aria-live="polite">
-    Steps to paste and save an image:<br><br>
-    1. Copy an image from any source (e.g., screenshot, browser, file explorer).<br>
-    2. Click anywhere on the page.<br>
-    3. Select your preferred image format (PNG, JPEG, WebP) below.<br>
-    4. How to paste:<br>
-    &nbsp;&nbsp;• Press Ctrl+V (Cmd+V on Mac) to paste the image from clipboard.<br>
-    &nbsp;&nbsp;• Alternatively, click the "Paste Image" button to paste using the Clipboard API.<br>
-    &nbsp;&nbsp;• Or, drag & drop inside the "Paste or Drop Here" box.<br>
-    &nbsp;&nbsp;5. Or drag and drop an image file anywhere on this page.<br>
-    6. The pasted, selected, or dropped image will be saved automatically in the selected format.<br>
-    7. If no image is found in the clipboard or drop, an alert notifies you.<br>
-    8. Use the "?" button anytime to toggle these instructions.
-  </p>
-  <button id="helpButton" aria-label="Show help note" title="Help">?</button>
+<body class="p-4 md:p-8 flex flex-col items-center min-h-screen">
 
-  <script src="script.js"></script>
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-[#303030] text-[#F2F2F2] px-6 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <span id="toastMessage" class="text-sm font-medium">Notification</span>
+        </div>
+    </div>
+
+    <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="m3-card max-w-md w-full p-6 relative">
+            <button id="closeHelpBtn" class="absolute top-4 right-4 text-[#444746] hover:bg-[#F0F0F0] p-2 rounded-full transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <h3 class="text-xl font-medium mb-4 text-[#1F1F1F]">Usage Guide</h3>
+            <ul class="space-y-3 text-sm text-[#444746]">
+                <li class="flex gap-3">
+                    <span class="material-symbols-outlined text-[#0B57D0]">drag_drop</span>
+                    <span><strong>Drag & Drop</strong> images directly onto the canvas.</span>
+                </li>
+                <li class="flex gap-3">
+                    <span class="material-symbols-outlined text-[#0B57D0]">layers</span>
+                    <span>Use <strong>Batch Mode</strong> to process multiple files simultaneously.</span>
+                </li>
+                <li class="flex gap-3">
+                    <span class="material-symbols-outlined text-[#0B57D0]">aspect_ratio</span>
+                    <span>Lock specific <strong>Dimensions</strong> to resize intelligently.</span>
+                </li>
+                <li class="flex gap-3">
+                    <span class="material-symbols-outlined text-[#0B57D0]">save</span>
+                    <span>Select <strong>Format</strong> and download. Bulk files save as ZIP.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <header class="w-full max-w-5xl flex items-center justify-between mb-6">
+        <div class="flex items-center gap-2">
+            <div class="bg-[#0B57D0] text-white p-2 rounded-xl">
+                <span class="material-symbols-outlined text-2xl">photo_library</span>
+            </div>
+            <h1 class="text-2xl font-normal text-[#1F1F1F]">Image Converter</h1>
+        </div>
+        <button id="helpBtn" class="text-[#444746] hover:bg-[#F0F0F0] p-2 rounded-full transition-colors" title="Help">
+            <span class="material-symbols-outlined">help</span>
+        </button>
+    </header>
+
+    <main class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-12 gap-6 flex-grow">
+        
+        <div class="lg:col-span-8 flex flex-col h-full">
+            <div id="dropZone" class="flex-grow min-h-[400px] lg:h-[600px] rounded-[24px] relative flex flex-col items-center justify-center cursor-pointer group overflow-hidden">
+                
+                <div id="placeholderContent" class="pointer-events-none flex flex-col items-center gap-4 p-8 text-center transition-opacity duration-300">
+                    <span class="material-symbols-outlined text-6xl text-[#0B57D0]">folder_open</span>
+                    <div class="space-y-1">
+                        <h3 class="text-xl text-[#1F1F1F]">Drop files here</h3>
+                        <p class="text-sm text-[#444746]">Supports HEIC, PNG, JPG, WebP, AVIF</p>
+                    </div>
+                    <button class="btn-filled px-6 py-2.5 mt-2 flex items-center gap-2 pointer-events-auto">
+                        <span class="material-symbols-outlined text-sm">upload_file</span>
+                        <span class="font-medium text-sm">Select Files</span>
+                    </button>
+                </div>
+
+                <div id="previewContainer" class="hidden absolute inset-0 w-full h-full p-6 flex flex-col items-center justify-center bg-[#F3F6FC]">
+                    <img id="imagePreview" class="hidden max-w-full max-h-full rounded-lg shadow-md object-contain checkerboard flex-1" alt="Preview" />
+                    <div id="previewGrid" class="hidden"></div>
+                    
+                    <div class="absolute bottom-6 flex gap-2 z-10">
+                         <button id="clearBtn" class="bg-[#303030] hover:bg-black text-white px-4 py-2 rounded-full shadow-lg flex items-center gap-2 transition-transform hover:scale-105">
+                            <span class="material-symbols-outlined text-sm">delete</span>
+                            <span class="text-sm font-medium">Clear All</span>
+                        </button>
+                    </div>
+                </div>
+
+                <input type="file" id="fileInput" class="hidden" multiple accept="image/*,.heic,.heif">
+            </div>
+        </div>
+
+        <div class="lg:col-span-4">
+            <div id="settingsPanel" class="m3-card p-6 flex flex-col gap-6 h-full transition-opacity duration-300">
+                
+                <div class="border-b border-[#E0E2E0] pb-4">
+                    <h2 class="text-lg font-medium text-[#1F1F1F] flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#0B57D0]">tune</span>
+                        Export Settings
+                    </h2>
+                    <p id="originalInfo" class="text-xs text-[#444746] mt-1 ml-8 font-mono">No images selected</p>
+                </div>
+
+                <div class="flex items-center justify-between px-1">
+                    <label for="batchModeToggle" class="text-sm font-medium text-[#444746] cursor-pointer select-none flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#0B57D0]">layers</span>
+                        Batch Mode
+                    </label>
+                    <input type="checkbox" id="batchModeToggle" class="toggle-switch" checked>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-medium text-[#444746] uppercase tracking-wider ml-1">Format</label>
+                    <div class="segmented-group w-full">
+                        <div class="segmented-option flex-1">
+                            <input type="radio" name="format" id="fmt-png" value="png" checked>
+                            <label for="fmt-png">PNG</label>
+                        </div>
+                        <div class="segmented-option flex-1">
+                            <input type="radio" name="format" id="fmt-jpg" value="jpeg">
+                            <label for="fmt-jpg">JPG</label>
+                        </div>
+                        <div class="segmented-option flex-1">
+                            <input type="radio" name="format" id="fmt-webp" value="webp">
+                            <label for="fmt-webp">WebP</label>
+                        </div>
+                         <div class="segmented-option flex-1">
+                            <input type="radio" name="format" id="fmt-avif" value="avif">
+                            <label for="fmt-avif">AVIF</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 opacity-50 pointer-events-none transition-opacity" id="qualityContainer">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="text-xs font-medium text-[#444746] uppercase tracking-wider">Quality</label>
+                        <span id="qualityValue" class="text-xs font-medium text-[#0B57D0] bg-[#E8F0FE] px-2 py-0.5 rounded">92%</span>
+                    </div>
+                    <input type="range" id="qualityInput" min="0.1" max="1" step="0.05" value="0.92" class="w-full accent-[#0B57D0]">
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex justify-between items-end">
+                        <label class="text-xs font-medium text-[#444746] uppercase tracking-wider ml-1">Dimensions</label>
+                        <button id="resetDims" class="text-xs text-[#0B57D0] font-medium hover:underline">Reset</button>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="m3-input-container flex-1">
+                            <input type="number" id="widthInput" class="m3-input" placeholder=" ">
+                            <label class="m3-label">Width</label>
+                            <button id="widthLockBtn" class="lock-btn" title="Lock Width for batch">
+                                <span class="material-symbols-outlined text-[18px]">lock_open</span>
+                            </button>
+                        </div>
+
+                        <button id="ratioLock" class="p-2 rounded-full hover:bg-[#F0F0F0] text-[#0B57D0] transition-colors" title="Toggle Aspect Ratio Link">
+                            <span class="material-symbols-outlined">link</span>
+                        </button>
+
+                        <div class="m3-input-container flex-1">
+                            <input type="number" id="heightInput" class="m3-input" placeholder=" ">
+                            <label class="m3-label">Height</label>
+                            <button id="heightLockBtn" class="lock-btn" title="Lock Height for batch">
+                                <span class="material-symbols-outlined text-[18px]">lock_open</span>
+                            </button>
+                        </div>
+                    </div>
+                    <p id="ratioStatus" class="text-[10px] text-[#747775] ml-1 flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[12px]">info</span> Aspect ratio locked
+                    </p>
+                </div>
+
+                <div class="flex-grow"></div>
+
+                <div class="flex items-center justify-between px-1">
+                    <label for="zipToggle" class="text-sm font-medium text-[#444746] cursor-pointer select-none flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#0B57D0]">folder_zip</span>
+                        Save as ZIP (Bulk)
+                    </label>
+                    <input type="checkbox" id="zipToggle" class="toggle-switch" checked>
+                </div>
+
+                <div class="flex items-center justify-between px-1 mb-2">
+                    <label for="autoDownloadToggle" class="text-sm font-medium text-[#444746] cursor-pointer select-none flex items-center gap-2">
+                        <span class="material-symbols-outlined text-[#0B57D0]">bolt</span>
+                        Auto Download
+                    </label>
+                    <input type="checkbox" id="autoDownloadToggle" class="toggle-switch">
+                </div>
+
+                <button id="downloadBtn" class="btn-filled w-full py-4 text-base font-medium flex justify-center items-center gap-2" disabled>
+                    <span class="material-symbols-outlined">download</span>
+                    <span id="downloadBtnText">Download Image</span>
+                </button>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="w-full text-center py-6 text-sm text-[#444746] mt-auto">
+        &copy; <span id="currentYear"></span> Ishtiak Ahmed. All rights reserved.
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>

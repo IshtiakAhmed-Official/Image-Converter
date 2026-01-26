@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #F0F2F5;
+    color: #1F1F1F;
+}
+
+/* Material 3 Card */
+.m3-card {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+}
+
+.m3-surface-container {
+    background-color: #F3F6FC;
+    border-radius: 16px;
+}
+
+/* Buttons */
+.btn-filled {
+    background-color: #0B57D0;
+    color: #FFFFFF;
+    border-radius: 9999px;
+    transition: transform 0.05s ease, background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.3);
+}
+
+.btn-filled:hover {
+    background-color: #0842A0;
+    box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+}
+
+.btn-filled:active {
+    transform: scale(0.98);
+}
+
+.btn-filled:disabled {
+    background-color: #E0E2E0;
+    color: #1F1F1F;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-tonal {
+    background-color: #C2E7FF;
+    color: #001D35;
+    border-radius: 12px;
+    transition: background-color 0.1s;
+}
+
+.btn-tonal:hover {
+    background-color: #B3D7EF;
+}
+
+.btn-outlined {
+    border: 1px solid #747775;
+    color: #0B57D0;
+    border-radius: 9999px;
+    background: transparent;
+}
+
+.btn-outlined:hover {
+    background-color: rgba(11, 87, 208, 0.08);
+    border-color: #0B57D0;
+}
+
+/* Inputs */
+.m3-input-container {
+    position: relative;
+}
+
+.m3-input {
+    border: 1px solid #747775;
+    border-radius: 4px;
+    padding: 12px 36px 12px 16px;
+    font-size: 16px;
+    color: #1F1F1F;
+    background: transparent;
+    width: 100%;
+}
+
+.m3-input:focus {
+    outline: none;
+    border-color: #0B57D0;
+    border-width: 2px;
+    padding: 11px 35px 11px 15px;
+}
+
+.m3-label {
+    position: absolute;
+    left: 12px;
+    top: -8px;
+    background-color: #FFFFFF;
+    padding: 0 4px;
+    font-size: 12px;
+    color: #747775;
+    pointer-events: none;
+}
+
+.m3-input:focus + .m3-label {
+    color: #0B57D0;
+}
+
+/* Segmented Control */
+.segmented-group {
+    display: flex;
+    border: 1px solid #747775;
+    border-radius: 9999px;
+    overflow: hidden;
+    width: 100%; 
+}
+
+.segmented-option input {
+    display: none;
+}
+
+.segmented-option label {
+    padding: 8px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #444746;
+    border-right: 1px solid #747775;
+    background: transparent;
+    transition: background 0.1s;
+    width: 100%;
+}
+
+.segmented-option:last-child label {
+    border-right: none;
+}
+
+.segmented-option input:checked + label {
+    background-color: #C2E7FF;
+    color: #001D35;
+}
+
+.segmented-option label:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Range Slider */
+input[type=range] {
+    height: 4px; 
+    border-radius: 2px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #0B57D0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    margin-top: -8px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    background: #E0E2E0;
+    height: 4px;
+    border-radius: 2px;
+}
+
+/* Drop Zone */
+#dropZone {
+    background-color: #F3F6FC;
+    border: 2px dashed #747775;
+    transition: background-color 0.1s;
+}
+
+#dropZone.drop-active {
+    background-color: #E8F0FE;
+    border-color: #0B57D0;
+}
+
+.checkerboard {
+    background-image: 
+        linear-gradient(45deg, #e0e0e0 25%, transparent 25%), 
+        linear-gradient(-45deg, #e0e0e0 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e0e0e0 75%), 
+        linear-gradient(-45deg, transparent 75%, #e0e0e0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    background-color: white;
+}
+
+/* Lock Button */
+.lock-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 4px;
+    border-radius: 50%;
+    color: #747775;
+    transition: all 0.1s;
+}
+
+.lock-btn:hover {
+    background-color: rgba(0,0,0,0.05);
+    color: #1F1F1F;
+}
+
+.lock-btn.locked {
+    color: #0B57D0;
+    background-color: #E8F0FE;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    appearance: none;
+    width: 48px;
+    height: 28px;
+    background: #E0E2E0;
+    border-radius: 9999px;
+    border: 2px solid #747775;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 16px;
+    height: 16px;
+    background: #747775;
+    border-radius: 50%;
+    transition: transform 0.1s cubic-bezier(0.2, 0.0, 0, 1.0), width 0.1s, height 0.1s;
+}
+
+.toggle-switch:checked {
+    background: #0B57D0;
+    border-color: #0B57D0;
+}
+
+.toggle-switch:checked::after {
+    background: #FFFFFF;
+    transform: translateX(20px);
+    width: 20px;
+    height: 20px;
+    top: 2px;
+}
+
+.toggle-switch:hover::after {
+    background: #1F1F1F;
+}
+
+.toggle-switch:checked:hover::after {
+    background: #D3E3FD;
+}
+
+/* Grid View */
+#previewGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.grid-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background: white;
+    border: 1px solid #E0E2E0;
+    transition: transform 0.1s;
+}
+
+.grid-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-chip {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+}
+
+.remove-chip:hover {
+    background: rgba(179, 38, 30, 0.9);
+}
